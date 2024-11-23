@@ -1,0 +1,58 @@
+class Solution {
+    // Function to detect cycle in an undirected graph.
+   
+        // Code here
+          public boolean isCycle(ArrayList<ArrayList<Integer>> adj) {
+        int V = adj.size(); // Get the number of vertices
+        boolean[] visited = new boolean[V]; // Visited array to track visited nodes
+
+        // Check for cycles in all connected components
+        for (int i = 0; i < V; i++) {
+            if (!visited[i]) { // If a node hasn't been visited
+                if (checkForCycle(adj, i, visited)) {
+                    return true; // Cycle detected
+                }
+            }
+        }
+        return false; // No cycles found
+    }
+
+    private boolean checkForCycle(ArrayList<ArrayList<Integer>> adj, int start, boolean[] visited) {
+        // Queue to store nodes and their parents
+        Queue<Pair> queue = new LinkedList<>();
+        queue.add(new Pair(start, -1)); // Add the starting node with parent -1
+        visited[start] = true; // Mark the starting node as visited
+
+        while (!queue.isEmpty()) {
+            Pair current = queue.poll(); // Dequeue the current node
+            int node = current.node;    // Current node
+            int parent = current.parent; // Parent of the current node
+
+            // Traverse all neighbors of the current node
+            for (int neighbor : adj.get(node)) {
+                if (!visited[neighbor]) {
+                    // If the neighbor hasn't been visited, add it to the queue
+                    queue.add(new Pair(neighbor, node));
+                    visited[neighbor] = true;
+                } else if (neighbor != parent) {
+                    // If the neighbor is visited and not the parent, a cycle is detected
+                    return true;
+                }
+            }
+        }
+
+        return false; // No cycle detected
+    }
+
+    // Helper class to store a node and its parent
+    private class Pair {
+        int node;
+        int parent;
+
+        Pair(int node, int parent) {
+            this.node = node;
+            this.parent = parent;
+        }
+    }
+        
+    }
