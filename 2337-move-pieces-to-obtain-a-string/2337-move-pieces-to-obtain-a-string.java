@@ -1,37 +1,31 @@
 class Solution {
     public boolean canChange(String start, String target) {
-        
-        if (!start.replace("_", "").equals(target.replace("_", ""))) {
-            return false;
-        }
-
-        int i = 0, j = 0;
+        int i=0;
+        int j=0;
         int n = start.length();
+        while(i<n || j<n){
+            //skip all blanks in start
+            while(i<n && start.charAt(i)=='_') i++;
 
-       
-        while (i < n && j < n) {
-            
-            while (i < n && start.charAt(i) == '_') i++;
-            
-            while (j < n && target.charAt(j) == '_') j++;
+            //skip all blanks in target
+            while(j<n && target.charAt(j)=='_') j++;
 
-            // If both pointers are valid
-            if (i < n && j < n) {
-                // Characters must match
-                if (start.charAt(i) != target.charAt(j)) return false;
-
-                // 'L' can only move left (i >= j)
-                if (start.charAt(i) == 'L' && i < j) return false;
-
-                // 'R' can only move right (i <= j)
-                if (start.charAt(i) == 'R' && i > j) return false;
-
-                // Move both pointers
-                i++;
-                j++;
+            //count is same only if both the string end at the same time
+            if(i==n || j==n){
+                return (i==n && j==n);
             }
-        }
 
+            // check false scenarios
+            if(start.charAt(i)!=target.charAt(j) || 
+            (start.charAt(i)=='L' && j>i) ||
+            (start.charAt(i)=='R' && j<i)
+            ){
+                return false;
+            }
+            //move to the next character after comparision 
+            i++;
+            j++;
+        }
         return true;
     }
 }
