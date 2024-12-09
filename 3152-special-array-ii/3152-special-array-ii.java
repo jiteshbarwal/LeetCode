@@ -1,39 +1,30 @@
 class Solution {
     public boolean[] isArraySpecial(int[] nums, int[][] queries) {
         int n = nums.length;
-
-        if (n <= 1) {
-           
-            boolean[] result = new boolean[queries.length];
-            for (int i = 0; i < queries.length; i++) {
-                result[i] = true;
-            }
-            return result;
-        }
-
-        
-        int[] special = new int[n - 1];
-        for (int i = 0; i < n - 1; i++) {
-            special[i] = (nums[i] % 2 != nums[i + 1] % 2) ? 1 : 0;
-        }
-
-        
         int[] prefixSum = new int[n];
+        prefixSum[0] = 1;
+
         for (int i = 1; i < n; i++) {
-            prefixSum[i] = prefixSum[i - 1] + (i - 1 < special.length ? special[i - 1] : 0);
+            if ((nums[i] & 1) == (nums[i - 1] & 1)) {
+                prefixSum[i] = 1;
+            } else {
+                prefixSum[i] = 1 + prefixSum[i - 1];
+            }
         }
 
-      
+        // Use a boolean array instead of List<Boolean>
         boolean[] ans = new boolean[queries.length];
-        int idx = 0;
-        for (int[] query : queries) {
-            int start = query[0];
-            int end = query[1];
+        for (int i = 0; i < queries.length; i++) {
+            int start = queries[i][0];
+            int end = queries[i][1];
+            int size = end - start + 1;
 
-            int transitions = prefixSum[end] - prefixSum[start];
-            ans[idx++] = (transitions == end - start);
+            if (prefixSum[end] >= size) {
+                ans[i] = true;
+            } else {
+                ans[i] = false;
+            }
         }
-
         return ans;
     }
 }
