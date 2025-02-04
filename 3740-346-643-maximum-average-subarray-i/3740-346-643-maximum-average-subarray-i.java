@@ -20,8 +20,8 @@ class Solution {
       avg=sum/k;
        System.out.println(avg);
       for (int i=k;i<n;i++){
-       sum = sum - nums[i - k] + nums[i];
-    avg = Math.max(avg, sum / k);
+        sum = sum-nums[i-k]+nums[i];
+        avg= Math.max(sum/k,avg);
       }
 
       return avg;
